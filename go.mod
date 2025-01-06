@@ -1,4 +1,4 @@
-module cryptowatch
+module github.com/gunasekar/cryptowatch
 
 go 1.23
 

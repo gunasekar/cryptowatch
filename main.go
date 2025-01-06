@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cryptowatch/notifier"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -14,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/gunasekar/cryptowatch/notifier"
 )
 
 type Config struct {
