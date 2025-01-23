@@ -259,8 +259,7 @@ func (pm *PriceMonitor) runWebSocketLoop() error {
 						change24h, _ := d["p24h"].(float64)
 
 						if price > 0 {
-							log.Printf("[%s] Price: $%.4f (1h: %.2f%%, 24h: %.2f%%)",
-								coinID, price, change1h, change24h)
+							// log.Printf("[%s] Price: $%.4f (1h: %.2f%%, 24h: %.2f%%)", coinID, price, change1h, change24h)
 							pm.checkPriceChange(coinID, price, change1h, change24h)
 						}
 					}
