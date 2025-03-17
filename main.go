@@ -23,6 +23,7 @@ type Config struct {
 	DropThreshold float64
 	RiseThreshold float64
 	BasePrices    map[string]float64
+	Debug         bool
 }
 
 type CoinState struct {
@@ -71,6 +72,9 @@ func (pm *PriceMonitor) checkPriceChange(coinID string, currentPrice float64, ch
 	}
 
 	percentageChange := ((currentPrice - state.basePrice) / state.basePrice) * 100
+	if pm.config.Debug {
+		log.Printf("[%s] Price: $%.4f. Base change: %.2f%% (1h: %.2f%%, 24h: %.2f%%)", coinID, currentPrice, percentageChange, change1h, change24h)
+	}
 
 	if !state.lastAlertTime.IsZero() && time.Since(state.lastAlertTime) < time.Minute {
 		return
@@ -259,7 +263,6 @@ func (pm *PriceMonitor) runWebSocketLoop() error {
 						change24h, _ := d["p24h"].(float64)
 
 						if price > 0 {
-							// log.Printf("[%s] Price: $%.4f (1h: %.2f%%, 24h: %.2f%%)", coinID, price, change1h, change24h)
 							pm.checkPriceChange(coinID, price, change1h, change24h)
 						}
 					}
@@ -340,6 +343,7 @@ func main() {
 		dropThreshold float64
 		riseThreshold float64
 		basePrices    string
+		debug         bool
 	)
 
 	flag.StringVar(&coinIDs, "coins", "", "Comma-separated list of coin IDs to monitor (e.g., '12345,67890')")
@@ -347,6 +351,7 @@ func main() {
 	flag.Float64Var(&dropThreshold, "drop", 5.0, "Price drop percentage threshold for alerts")
 	flag.Float64Var(&riseThreshold, "rise", 10.0, "Price rise percentage threshold for alerts")
 	flag.StringVar(&basePrices, "base-prices", "", "Comma-separated list of base prices in format 'coinID:price' (e.g., '12345:50000,67890:1800')")
+	flag.BoolVar(&debug, "debug", false, "Enable debug mode")
 	flag.Parse()
 
 	if coinIDs == "" {
@@ -382,6 +387,7 @@ func main() {
 		DropThreshold: dropThreshold,
 		RiseThreshold: riseThreshold,
 		BasePrices:    basePriceMap,
+		Debug:         debug,
 	}
 
 	if err := monitorPrices(config); err != nil {
