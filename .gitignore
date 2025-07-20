@@ -27,6 +27,7 @@ go.work.sum
 # IDE specific files
 .vscode/
 .idea/
+.claude/
 
 # OS generated files
 .DS_Store
