@@ -31,6 +31,15 @@ sudo systemctl enable cryptowatch
 
 ## Configuration
 
+### Binary setup
+```bash
+# Install binary
+sudo mv cryptowatch /usr/local/bin/
+sudo chown root:root /usr/local/bin/cryptowatch
+sudo chmod 755 /usr/local/bin/cryptowatch
+```
+
+### Environment configuration
 Copy environment template:
 ```bash
 sudo cp cryptowatch.env.example /etc/cryptowatch/cryptowatch.env
